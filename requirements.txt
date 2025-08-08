@@ -1,0 +1,11 @@
+Flask
+gunicorn
+pandas
+numpy
+xgboost
+scikit-learn
+imbalanced-learn
+joblib
+fastapi
+uvicorn
+requests

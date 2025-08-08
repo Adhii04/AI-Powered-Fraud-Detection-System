@@ -1,0 +1,23 @@
+{
+  "trans_date_trans_time": "2024-08-08 03:15:00",
+  "cc_num": "4532777788889999",
+  "merchant": "Digital Electronics Store",
+  "category": "electronics",
+  "amt": 3999.99,
+  "first": "John",
+  "last": "Smith",
+  "gender": "M",
+  "street": "456 Oak Avenue",
+  "city": "Miami",
+  "state": "FL",
+  "zip": "33101",
+  "lat": 25.7617,
+  "long": -80.1918,
+  "city_pop": 454279,
+  "job": "Software Developer",
+  "dob": "1985-05-15",
+  "trans_num": "TR987654321",
+  "unix_time": 1691463300,
+  "merch_lat": 40.7589,
+  "merch_long": -73.9851
+}
