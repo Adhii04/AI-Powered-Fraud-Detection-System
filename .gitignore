@@ -28,7 +28,6 @@ wheels/
 
 # Large data files
 *.csv
-*.pkl
 
 # IDE specific files
 .idea/

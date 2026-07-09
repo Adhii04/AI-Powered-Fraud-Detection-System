@@ -8,3 +8,12 @@ services:
     envVars:
       - key: PORT
         value: 8000
+
+  - type: web
+    name: fraud-detection-dashboard
+    env: docker
+    dockerfilePath: frontend.Dockerfile
+    plan: free
+    envVars:
+      - key: API_URL
+        value: https://fraud-detection-api.onrender.com/predict
