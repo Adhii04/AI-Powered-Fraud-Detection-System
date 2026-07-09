@@ -1,139 +1,82 @@
-# AI-Powered Fraud Detection System
+# AI-Powered Fraud Detection System (End-to-End MVP)
 
-An advanced fraud detection system using machine learning models trained with different sampling techniques (SMOTE, BorderlineSMOTE, and ADASYN) to detect fraudulent transactions in real-time through a FastAPI interface.
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.103.2-green)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.27.2-red)
+![XGBoost](https://img.shields.io/badge/XGBoost-2.0.0-orange)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 
-## Features
+An advanced, end-to-end machine learning system designed to detect fraudulent financial transactions in real-time. This project demonstrates a complete MLOps pipeline from data preprocessing and augmentation to model training, API deployment, and containerization.
 
-- **Multiple ML Models**: Implements three different models trained with various sampling techniques:
-  - SMOTE (Synthetic Minority Over-sampling Technique)
-  - BorderlineSMOTE
-  - ADASYN (Adaptive Synthetic Sampling)
+## 🌟 Key Features
 
-- **Real-time Predictions**: Fast and efficient API endpoints for real-time fraud detection
+- **XGBoost & SMOTE Architecture**: Utilizes extreme gradient boosting combined with Synthetic Minority Over-sampling Technique (SMOTE) to effectively identify rare fraudulent patterns in highly imbalanced datasets.
+- **Data Augmentation**: Includes synthetic data generation scripts to augment limited transaction records into robust, 50,000+ row datasets with statistical noise.
+- **Real-Time FastAPI Backend**: High-performance RESTful API with strict Pydantic data validation and live inference capabilities.
+- **Interactive Streamlit Dashboard**: A professional, user-friendly frontend allowing non-technical stakeholders to input transaction details and instantly visualize fraud probability.
+- **Fully Dockerized**: The frontend and backend microservices are fully containerized using Docker Compose for instant, reproducible deployment.
 
-- **Batch Processing**: Support for both single transaction and batch transaction predictions
+## 🏗️ Architecture
 
-- **Input Validation**: Comprehensive input validation and error handling
+1. **`src/preprocess.py`**: Merges relational CSV datasets, extracts time-series features (Hour, DayOfWeek), and handles missing data.
+2. **`src/augment_data.py`**: Solves the small-dataset problem by multiplying records and injecting statistical noise to prevent overfitting.
+3. **`src/train.py`**: Builds a `scikit-learn` Pipeline incorporating `StandardScaler`, `OneHotEncoder`, SMOTE, and XGBoost, saving the trained brain as a `.pkl` artifact.
+4. **`main.py`**: The FastAPI application serving the `.pkl` model.
+5. **`frontend/app.py`**: The Streamlit interactive dashboard.
 
-- **Detailed Output**: Provides fraud probability scores along with binary predictions
+## 🚀 Getting Started (Zero Configuration)
 
-## Technology Stack
+The easiest way to run this project is using Docker. You do not need to install Python or any dependencies manually.
 
-- **Python 3.11+**
-- **FastAPI**: Modern, fast web framework for building APIs
-- **scikit-learn**: Machine learning models and preprocessing
-- **imbalanced-learn**: Implementation of sampling techniques
-- **pandas**: Data manipulation and analysis
-- **numpy**: Numerical computations
-- **uvicorn**: ASGI server implementation
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
 
-## Installation
+### Quick Start
 
-1. Clone the repository:
+1. Clone the repository and navigate into the folder:
 ```bash
 git clone https://github.com/Adhii04/AI-Powered-Fraud-Detection-System.git
 cd AI-Powered-Fraud-Detection-System
 ```
 
-2. Create and activate a virtual environment:
+2. Boot up the entire system (Frontend + Backend) using Docker Compose:
 ```bash
-python -m venv myvenv
-# On Windows
-myvenv\Scripts\activate
-# On Unix or MacOS
-source myvenv/bin/activate
+docker-compose up --build
 ```
 
-3. Install dependencies:
+3. Access the Applications:
+- **Interactive Dashboard (Streamlit):** [http://localhost:8501](http://localhost:8501)
+- **API Documentation (FastAPI Swagger UI):** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+## 💻 Manual Setup (Without Docker)
+
+If you prefer to run the system natively on your machine:
+
+1. Create a virtual environment and install dependencies:
 ```bash
+python -m venv venv
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Mac/Linux
 pip install -r requirements.txt
 ```
 
-## Usage
-
-1. Start the API server:
+2. Start the FastAPI Backend:
 ```bash
 python main.py
 ```
 
-2. The API will be available at `http://127.0.0.1:8000`
-
-### API Endpoints
-
-#### Single Transaction Predictions
-- `/predict/smote`: Predictions using SMOTE model
-- `/predict/borderline`: Predictions using BorderlineSMOTE model
-- `/predict/adasyn`: Predictions using ADASYN model
-
-#### Batch Predictions
-- `/predict/batch/smote`: Batch predictions with SMOTE model
-- `/predict/batch/borderline`: Batch predictions with BorderlineSMOTE model
-- `/predict/batch/adasyn`: Batch predictions with ADASYN model
-
-### Example Request
-
-```json
-{
-    "trans_date_trans_time": "2025-08-08 14:30:00",
-    "cc_num": "4532673744147157",
-    "merchant": "Online Electronics Store",
-    "category": "electronics",
-    "first": "John",
-    "last": "Smith",
-    "gender": "M",
-    "street": "123 Main St",
-    "city": "New York",
-    "state": "NY",
-    "zip": "10001",
-    "job": "Software Engineer",
-    "dob": "1990-05-15",
-    "trans_num": "2025080814301234",
-    "amt": 3999.99,
-    "lat": 40.7128,
-    "long": -74.0060,
-    "city_pop": 8419000,
-    "unix_time": 1754585800,
-    "merch_lat": 34.0522,
-    "merch_long": -118.2437
-}
+3. Open a **second terminal**, activate the environment, and start the Frontend:
+```bash
+streamlit run frontend/app.py
 ```
 
-### Example Response
+## 🧠 Model Training
 
-```json
-{
-    "is_fraud": true,
-    "fraud_probability": 0.89,
-    "legitimate_probability": 0.11
-}
-```
+If you want to retrain the model on new data:
+1. Place your CSVs in `fraud-dataset/Data/`.
+2. Run `python src/preprocess.py` to merge them into `data/processed/merged_data.csv`.
+3. Run `python src/augment_data.py` to boost the dataset size.
+4. Run `python src/train.py` to train the XGBoost Pipeline and save the new `.pkl` model.
 
-## API Documentation
-
-After starting the server, visit:
-- Swagger UI: `http://127.0.0.1:8000/docs`
-- ReDoc: `http://127.0.0.1:8000/redoc`
-
-## Model Information
-
-The system uses three different sampling techniques to handle imbalanced data:
-
-1. **SMOTE**: Creates synthetic samples of the minority class
-2. **BorderlineSMOTE**: Focuses on minority instances near the decision boundary
-3. **ADASYN**: Generates different numbers of synthetic samples based on local density
-
-Each model is trained on the same dataset but uses different sampling techniques to handle the class imbalance problem common in fraud detection.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Credit card fraud detection dataset
-- imbalanced-learn library for sampling techniques
-- FastAPI framework for the API implementation
+## 📝 License
+This project is licensed under the MIT License.
